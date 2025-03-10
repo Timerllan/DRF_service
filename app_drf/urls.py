@@ -10,3 +10,4 @@ urlpatterns = [
     path('lessons/', LessonListCreateAPIView.as_view(), name='lesson-create-list'),
     path('lessons/<int:pk>', LessonDeleteUpdateApiView.as_view(), name='lesson-delete-update')
 ]
+print()
