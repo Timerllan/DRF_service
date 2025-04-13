@@ -161,3 +161,4 @@ cython_debug/
 /django_online_store
 /postgresql
 .media/
+/venvlinux/
