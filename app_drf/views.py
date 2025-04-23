@@ -1,10 +1,7 @@
-from rest_framework import viewsets, generics
-from rest_framework.response import Response
-from rest_framework.viewsets import ModelViewSet
-
 from .models import Course, Lesson
 from .serializer import CourseSerializer, LessonSerializer
-from rest_framework import viewsets, status
+from rest_framework import viewsets
+from app_drf.permissions import IsModeratorOrOwner
 
 
 # Create your views here.
@@ -12,13 +9,22 @@ from rest_framework import viewsets, status
 class CourseViewSet(viewsets.ModelViewSet):
     queryset = Course.objects.all()
     serializer_class = CourseSerializer
+    permission_classes = [IsModeratorOrOwner]
+
+    def get_queryset(self):
+        user = self.request.user
+        if user.groups.filter(name='Moderation').exists():
+            return Course.objects.all()  # Модераторы видят ВСЁ
+        return Course.objects.filter(user=user)
 
 
-class LessonListCreateAPIView(generics.ListCreateAPIView):
+class LessonViewSet(viewsets.ModelViewSet):
     queryset = Lesson.objects.all()
     serializer_class = LessonSerializer
+    permission_classes = [IsModeratorOrOwner]
 
-
-class LessonDeleteUpdateApiView(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Lesson.objects.all()
-    serializer_class = LessonSerializer
+    def get_queryset(self):
+        user = self.request.user
+        if user.groups.filter(name='Moderation').exists():
+            return Lesson.objects.all()  # Модераторы видят ВСЁ
+        return Lesson.objects.filter(user=user)
