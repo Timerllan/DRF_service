@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Payments
+from .models import Payments, User
 
 
 class PaymentsAdmin(admin.ModelAdmin):
@@ -10,3 +10,12 @@ class PaymentsAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Payments, PaymentsAdmin)
+
+
+class UserAdmin(admin.ModelAdmin):
+    list_display = ('email', 'phone', 'city', 'avatar')
+    search_fields = ('email', 'phone', 'city')
+    list_filter = ('email', 'city',)
+
+
+admin.site.register(User, UserAdmin)
